@@ -28,7 +28,6 @@ def crea_mapa_base(alto=15, largo=30, agua=20, obs=50, mostrar_niveles=False):
     mapa = ""
     for i in range(alto+2):  # filas
         for j in range(largo+2):  # columnas
-            n = rd(0, 5)
             if i == 0 or i == alto+1 or j == 0 or j == largo+1:
                 mapa = mapa + "#"
             elif i == nave[0] and j == nave[1]:
@@ -41,6 +40,7 @@ def crea_mapa_base(alto=15, largo=30, agua=20, obs=50, mostrar_niveles=False):
                 obs_dentro += 1
             else:
                 if mostrar_niveles:
+                    n = rd(0, 5)
                     mapa = mapa + str(NIVELES[n])
                 else:
                     mapa = mapa + ' '
