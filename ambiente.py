@@ -45,7 +45,7 @@ def crea_mapa_base(alto=15, largo=30, agua=20, obs=50, mostrar_niveles=False):
                 else:
                     mapa = mapa + ' '
         mapa = mapa + '\n'
-    print("Nave ", mostrar_niveles)
+    print("Nave ubicada en fila:", nave[0], 'columna:', nave[1])
     print("Agua ", agua_dentro)
     print("Obs ", obs_dentro)
     return mapa
