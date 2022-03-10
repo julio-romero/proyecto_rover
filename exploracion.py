@@ -24,6 +24,7 @@ class MazeSolver(SearchProblem):
             for x in range(len(self.board[y])):
                 if self.board[y][x] == "N":
                     self.initial = (x, y)
+                    self.board[y][x] = 3 #asignamos al lugar incial de la nave el numero 1
                 elif self.board[y][x] == "*":
                     self.goal = (x, y)
         
@@ -38,8 +39,9 @@ class MazeSolver(SearchProblem):
             x,y = self.result(state,action)
             newx, newy = self.result(state, action)
             if self.board[newy][newx] != '-' and self.board[newy][newx] != "#":
-                actions.append(action)                
-           
+                if abs(int(self.board[y][x]) - int(self.board[newy][newx]))<=1: #la diferencia de la nave no mayor a 1
+                    actions.append(action)
+
         return actions
 
     # Update the state based on the action
@@ -78,7 +80,7 @@ class MazeSolver(SearchProblem):
 
 if __name__ == "__main__":
     # Define the map
-    MAP = crea_mapa_base(30,200,1,1200,locacion_nave=[2,2])
+    MAP = crea_mapa_base(15,30,20,50,mostrar_niveles = 1)
 
     # Convert map to a list
     print(MAP)
