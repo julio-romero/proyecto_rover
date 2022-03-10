@@ -1,10 +1,13 @@
 """ Codigo del libro con modificaciones y comentarios mios"""
 
+import math
 from ast import Raise
 from inspect import Attribute
-import math
-from ambiente import crea_mapa_base
+from unittest import result
+
 from simpleai.search import SearchProblem, astar, greedy, uniform_cost
+from random import randint as rd
+from ambiente import crea_mapa_base
 
 #Los estados son tuplas de coordenadas (x,y) que se verifican en el tablero
 #En el _init_ se convierte a coordenadas el tablero
@@ -24,7 +27,7 @@ class MazeSolver(SearchProblem):
             for x in range(len(self.board[y])):
                 if self.board[y][x] == "N":
                     self.initial = (x, y)
-                    self.board[y][x] = 3 #asignamos al lugar incial de la nave el numero 1
+                    self.board[y][x] =  rd(0,5)
                 elif self.board[y][x] == "*":
                     self.goal = (x, y)
         
@@ -39,9 +42,15 @@ class MazeSolver(SearchProblem):
             x,y = self.result(state,action)
             newx, newy = self.result(state, action)
             if self.board[newy][newx] != '-' and self.board[newy][newx] != "#":
-                if abs(int(self.board[y][x]) - int(self.board[newy][newx]))<=1: #la diferencia de la nave no mayor a 1
+                try: 
+                    if self.board[newy][newx] != '*':
+                        pass
+                    if abs(int(self.board[y][x]) - int(self.board[newy][newx]))<=1: #la diferencia de la nave no mayor a 1
+                        actions.append(action)
+                    else:
+                        pass
+                except ValueError:
                     actions.append(action)
-
         return actions
 
     # Update the state based on the action
@@ -80,8 +89,27 @@ class MazeSolver(SearchProblem):
 
 if __name__ == "__main__":
     # Define the map
-    MAP = crea_mapa_base(15,30,20,50,mostrar_niveles = 1)
 
+    #MAP = crea_mapa_base(20,150,200,500,mostrar_niveles = 1,locacion_nave=[1,2])
+    MAP = """
+    ################################
+    #43-43405532*1*005-3202035*2024#
+    #1134-40203*0135211001051103145#
+    #41442-11*244253342131555552403#
+    #5511423234-0443-103--5-0230533#
+    #13554024410435024014232-554354#
+    #41044351435141-001-33*1341-435#
+    #-04-4112-0043013-3451011052203#
+    #40-305102421-3421045443-00330-#
+    #5-025513233-35*433-1513-001334#
+    #2*202151002351455-3523001-*322#
+    #--311302-0321001-410-130325532#
+    #34053533232-0-230534023223-425#
+    #404153-3525-N10-31323333252050#
+    #412-532-1130124012355554210324#
+    #-053345-3552244304-50120425-12#
+    ################################
+    """
     # Convert map to a list
     print(MAP)
     MAP = [list(x) for x in MAP.split("\n") if x]
@@ -103,37 +131,13 @@ if __name__ == "__main__":
     }
 
     # Create maze solver object
-    try:
-        problem = MazeSolver(MAP)
-    except AttributeError:
-        print("Error en la generacion del mapa aleatorio, usando mapa por defecto")
-        print("Agua  20 Obs  98 Nave en 10,22")
-        MAP = """
-        ################################
-        #      -* -         ---     -- #
-        #     -     -     *   - *- - --#
-        # -  -           -  *      - - #
-        #     -   * -         -  ----  #
-        # -    -   *  -    -  - - -  - #
-        #       - -   - -*-- -         #
-        #        *  -*-    --      -   #
-        # *  *--- -  *-- -          -  #
-        #            *   *- *  **      #
-        #      * ----    *  --N-- -    #
-        #      -  - -       --    ---  #
-        # ----    -   -   -  -       - #
-        #         --       - -        -#
-        # * --     -       --          #
-        #   -   - -     --    -  -     #
-        ################################
-        """
-        problem = MazeSolver(MAP)
+    problem = MazeSolver(MAP)
 
 
     # Run the solver
-    result = astar(problem, graph_search=True)
-    #result = greedy(problem,True) #sin el True, tarda muchísimo
+    #result = greedy(problem, graph_search=True)
     #result = uniform_cost(problem,True) #sin el True, tarda muchísimo
+    result = astar(problem,graph_search=True)
     try:
         path = [x[1] for x in result.path()]
 
@@ -147,7 +151,7 @@ if __name__ == "__main__":
                 elif (x, y) == problem.goal:
                     print('N', end='')
                 elif (x, y) in path:
-                    print('o', end='')
+                    print('>', end='')
                 else:
                     print(MAP[y][x], end='')
 
