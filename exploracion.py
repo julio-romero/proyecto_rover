@@ -3,49 +3,53 @@
 import math
 from ast import Raise
 from inspect import Attribute
+from random import randint as rd
 from unittest import result
 
 from simpleai.search import SearchProblem, astar, greedy, uniform_cost
-from random import randint as rd
+
 from ambiente import crea_mapa_base
 
-#Los estados son tuplas de coordenadas (x,y) que se verifican en el tablero
-#En el _init_ se convierte a coordenadas el tablero
-#En actions se usa el tablero para ver qué acción se puede tomar, pero el
-#estado desde el principio es inicializado en la tupla y solamente se va actualizando
+# Los estados son tuplas de coordenadas (x,y) que se verifican en el tablero
+# En el _init_ se convierte a coordenadas el tablero
+# En actions se usa el tablero para ver qué acción se puede tomar, pero el
+# estado desde el principio es inicializado en la tupla y solamente se va actualizando
 
 # Class containing the methods to solve the maze
+
+
 class MazeSolver(SearchProblem):
-    # Initialize the class 
+    # Initialize the class
     def __init__(self, board):
-        self.board = board #Recibe el tablero en formato lista de listas con strings
+        self.board = board  # Recibe el tablero en formato lista de listas con strings
         self.goal = (0, 0)
 
-        #Busca en el tablero los puntos iniciales y finales
-        #Toma en cuenta que en la orilla izquierda del tablero hay 4 espacios
+        # Busca en el tablero los puntos iniciales y finales
+        # Toma en cuenta que en la orilla izquierda del tablero hay 4 espacios
         for y in range(len(self.board)):
             for x in range(len(self.board[y])):
                 if self.board[y][x] == "N":
                     self.initial = (x, y)
-                    self.board[y][x] =  rd(0,5)
+                    self.board[y][x] = rd(0, 5)
                 elif self.board[y][x] == "*":
                     self.goal = (x, y)
-        
-        super(MazeSolver, self).__init__(initial_state=self.initial)
 
+        super(MazeSolver, self).__init__(initial_state=self.initial)
 
     # Define the method that takes actions
     # to arrive at the solution
+
     def actions(self, state):
         actions = []
         for action in COSTS.keys():
-            x,y = self.result(state,action)
+            x, y = self.result(state, action)
             newx, newy = self.result(state, action)
             if self.board[newy][newx] != '-' and self.board[newy][newx] != "#":
-                try: 
+                try:
                     if self.board[newy][newx] != '*':
                         pass
-                    if abs(int(self.board[y][x]) - int(self.board[newy][newx]))<=1: #la diferencia de la nave no mayor a 1
+                    # la diferencia de la nave no mayor a 1
+                    if abs(int(self.board[y][x]) - int(self.board[newy][newx])) <= 1:
                         actions.append(action)
                     else:
                         pass
@@ -56,9 +60,9 @@ class MazeSolver(SearchProblem):
     # Update the state based on the action
     def result(self, state, action):
         x, y = state
-        #el if con que sea diferente de 0 es true
-        #en los casos como "up","up right" y "up left" el count lo toma en 
-        #cuenta y realiza el ajuste en la coordenada
+        # el if con que sea diferente de 0 es true
+        # en los casos como "up","up right" y "up left" el count lo toma en
+        # cuenta y realiza el ajuste en la coordenada
         if action.count("up"):
             y -= 1
         if action.count("down"):
@@ -86,6 +90,7 @@ class MazeSolver(SearchProblem):
         gx, gy = self.goal
 
         return math.sqrt((x - gx) ** 2 + (y - gy) ** 2)
+
 
 if __name__ == "__main__":
     # Define the map
@@ -116,14 +121,14 @@ if __name__ == "__main__":
 
     # Define cost of moving around the map
     cost_regular = 1
-    cost_diagonal = 1
+    cost_diagonal = 2
 
     # Create the cost dictionary
     COSTS = {
         "up": cost_regular,
         "down": cost_regular,
-        "left": cost_regular,
-        "right": cost_regular,
+        # "left": cost_regular,
+        # "right": cost_regular,
         "up left": cost_diagonal,
         "up right": cost_diagonal,
         "down left": cost_diagonal,
@@ -133,21 +138,19 @@ if __name__ == "__main__":
     # Create maze solver object
     problem = MazeSolver(MAP)
 
-
     # Run the solver
     #result = greedy(problem, graph_search=True)
     #result = uniform_cost(problem,True) #sin el True, tarda muchísimo
-    result = astar(problem,graph_search=True)
+    result = astar(problem, graph_search=True)
     try:
         path = [x[1] for x in result.path()]
-
 
         # Print the result
         print()
         for y in range(len(MAP)):
             for x in range(len(MAP[y])):
                 if (x, y) == problem.initial:
-                    print('N', end='')
+                    print(' ', end='')
                 elif (x, y) == problem.goal:
                     print('N', end='')
                 elif (x, y) in path:
@@ -157,5 +160,4 @@ if __name__ == "__main__":
 
             print()
     except AttributeError or NameError:
-        raise AttributeError ("Algo salio mal, corre de nuevo la funcion")
-
+        raise AttributeError("Algo salio mal, corre de nuevo la funcion")
