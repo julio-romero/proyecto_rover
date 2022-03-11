@@ -43,18 +43,29 @@ class MazeSolver(SearchProblem):
         actions = []
         for action in COSTS.keys():
             x, y = self.result(state, action)
+            try:
+                n = int(self.board[y][x])
+            except ValueError:
+                n = int(self.initial)
             newx, newy = self.result(state, action)
+            try:
+                newn = int(self.board[newy][newx])
+            except ValueError:
+                newn = n
+            print(n,newn)
             if self.board[newy][newx] != '-' and self.board[newy][newx] != "#":
-                try:
-                    if self.board[newy][newx] != '*':
-                        pass
-                    # la diferencia de la nave no mayor a 1
-                    if abs(int(self.board[y][x]) - int(self.board[newy][newx])) <= 1:
-                        actions.append(action)
-                    else:
-                        pass
-                except ValueError:
+                if abs(n-newn)<=1:
                     actions.append(action)
+                #try:
+                    #if self.board[newy][newx] != '*':
+                     #   pass
+                    # la diferencia de la nave no mayor a 1
+                    #if abs(int(self.board[y][x]) - int(self.board[newy][newx])) <= 1:
+                    #    actions.append(action)
+                   #else:
+                     #   pass
+                #except ValueError:
+                
         return actions
 
     # Update the state based on the action
