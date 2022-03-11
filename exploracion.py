@@ -5,6 +5,9 @@ from ast import Raise
 from inspect import Attribute
 from random import randint as rd
 from unittest import result
+from scipy.misc import derivative
+
+from sympy import derive_by_array
 
 from simpleai.search import SearchProblem, astar, greedy, uniform_cost
 
@@ -70,7 +73,7 @@ class MazeSolver(SearchProblem):
 
     # Update the state based on the action
     def result(self, state, action):
-        x, y = state
+        x, y, n = state
         # el if con que sea diferente de 0 es true
         # en los casos como "up","up right" y "up left" el count lo toma en
         # cuenta y realiza el ajuste en la coordenada
@@ -83,7 +86,7 @@ class MazeSolver(SearchProblem):
         if action.count("right"):
             x += 1
 
-        new_state = (x, y)
+        new_state = (x,y,z)
 
         return new_state
 
@@ -97,12 +100,11 @@ class MazeSolver(SearchProblem):
 
     # Heuristic that we use to arrive at the solution
     def heuristic(self, state):
-        x, y = state
+        x, y,z = state
         gx, gy = self.goal
 
         return math.sqrt((x - gx) ** 2 + (y - gy) ** 2)
-
-
+  
 if __name__ == "__main__":
     # Define the map
 
