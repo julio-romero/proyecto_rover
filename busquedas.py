@@ -1,12 +1,17 @@
 import math
-from ast import Raise
-from inspect import Attribute
+#from ast import Raise
+#from inspect import Attribute
 from unittest import result
 
 from simpleai.search import SearchProblem, astar, greedy, uniform_cost, breadth_first, depth_first
 from random import randint as rd
 from ambiente import crea_mapa_base
 import os
+
+
+#Se usó como base el código "maze.py"
+
+
 #Los estados son tuplas de coordenadas (x,y) que se verifican en el tablero
 #En el _init_ se convierte a coordenadas el tablero
 #En actions se usa el tablero para ver qué acción se puede tomar, pero el
@@ -79,6 +84,7 @@ class MazeSolver(SearchProblem):
             return COSTS[action]
 
     # Heuristic that we use to arrive at the solution
+    #Distancia entre punto actual y objetivo
     def heuristic(self, state):
         x, y = state
         gx, gy = self.goal
@@ -89,25 +95,25 @@ if __name__ == "__main__":
     # Define the map
 
     MAP = crea_mapa_base(20,150,200,500,mostrar_niveles = 1,locacion_nave=[1,2])
-    # MAP = """
-    # ################################
-    # #43-43405532*1*005-3202035*2024#
-    # #1134-40203*0135211001051103145#
-    # #41442-11*244253342131555552403#
-    # #5511423234-0443-103--5-0230533#
-    # #13554024410435024014232-554354#
-    # #41044351435141-001-33*1341-435#
-    # #-04-4112-0043013-3451011052203#
-    # #40-305102421-3421045443-00330-#
-    # #5-025513233-35*433-1513-001334#
-    # #2*202151002351455-3523001-*322#
-    # #--311302-0321001-410-130325532#
-    # #34053533232-0-230534023223-425#
-    # #404153-3525-N10-31323333252050#
-    # #412-532-1130124012355554210324#
-    # #-053345-3552244304-50120425-12#
-    # ################################
-    # """
+    #MAP = """
+    ################################
+    #43-43405532*1*005-3202035*2024#
+    #1134-40203*0135211001051103145#
+    #41442-11*244253342131555552403#
+    #5511423234-0443-123--5-0230533#
+    #13554024410435024014232-554354#
+    #41044351435141-001-33*1341-435#
+    #-04-4112-0043013-3451011052203#
+    #40-305102421-3421N45443-00330-#
+    #5-025513233-35*433-1513-001334#
+    #2*202151002351455-3523001-*322#
+    #--311302-0321001-410-130325532#
+    #34043533232-0-230534023223-425#
+    #404153-3525-310-31323333252050#
+    #412-532-1130124012355554210324#
+    #-053345-3552244304-50120425-12#
+    ################################
+    #"""
     # Convert map to a list
     print(MAP)
     MAP = [list(x) for x in MAP.split("\n") if x]
@@ -139,14 +145,11 @@ if __name__ == "__main__":
     try:
         path = [x[1] for x in result.path()]
     except AttributeError:
-        print("XD")
+        print("RUN AGAIN PLEASE")
         os.abort()
-
-
 
     # Print the result
     print()
-    contadfs = 0
     for y in range(len(MAP)):
         for x in range(len(MAP[y])):
             if (x, y) == problem.initial:
@@ -155,14 +158,12 @@ if __name__ == "__main__":
                 print('N', end='')
             elif (x, y) in path:
                 print('>', end='')
-                contadfs += 1
             else:
                 print(MAP[y][x], end='')
 
         print()
-    print("Numero de movimientos:", contadfs)
-    print(f"Costo:{result.cost:.1f}")
-    result = None
+    print(f"\nNumero de movimientos: {len(result.path())-1}")
+    print(f"Costo: {result.cost:.1f}")
     print("___________________________________")
     #print("Costo:", result.cost)
     
@@ -174,7 +175,6 @@ if __name__ == "__main__":
 
     # Print the result
     print()
-    contabfs = 0
     for y in range(len(MAP)):
         for x in range(len(MAP[y])):
             if (x, y) == problem.initial:
@@ -183,16 +183,13 @@ if __name__ == "__main__":
                 print('N', end='')
             elif (x, y) in path:
                 print('>', end='')
-                contabfs += 1
             else:
                 print(MAP[y][x], end='')
 
         print()
-    print("Numero de movimientos:", contabfs)
-    print("Costo:", result.cost)
-    result = None
+    print(f"\nNumero de movimientos: {len(result.path())-1}")
+    print(f"Costo: {result.cost:.1f}")
     print("___________________________________")
-    #print("Costo:", result.cost)
 
 
     #A* 
@@ -203,7 +200,6 @@ if __name__ == "__main__":
 
     # Print the result
     print()
-    contaa = 0
     for y in range(len(MAP)):
         for x in range(len(MAP[y])):
             if (x, y) == problem.initial:
@@ -212,17 +208,14 @@ if __name__ == "__main__":
                 print('N', end='')
             elif (x, y) in path:
                 print('>', end='')
-                contaa += 1
             else:
                 print(MAP[y][x], end='')
 
         print()
-    print("Numero de movimientos:", contaa)
-    print("Costo:", result.cost)
-    result = None
+    print(f"\nNumero de movimientos: {len(result.path())-1}")
+    print(f"Costo: {result.cost:.1f}")
     print("___________________________________")
 
-    #print("Costo:", result.cost)
     
     
     #GREEDY 
@@ -233,7 +226,6 @@ if __name__ == "__main__":
 
     # Print the result
     print()
-    contag = 0
     for y in range(len(MAP)):
         for x in range(len(MAP[y])):
             if (x, y) == problem.initial:
@@ -242,16 +234,13 @@ if __name__ == "__main__":
                 print('N', end='')
             elif (x, y) in path:
                 print('>', end='')
-                contag += 1
             else:
                 print(MAP[y][x], end='')
 
         print()
-    print("Numero de movimientos:", contag)
-    print("Costo:", result.cost)
-    result = None
+    print(f"\nNumero de movimientos: {len(result.path())-1}")
+    print(f"Costo: {result.cost:.1f}")
     print("___________________________________")
-    #print("Costo:", result.cost)
     
     #UNIFORM COST 
     result = uniform_cost(problem,True) 
@@ -261,7 +250,6 @@ if __name__ == "__main__":
 
     # Print the result
     print()
-    contauc = 0
     for y in range(len(MAP)):
         for x in range(len(MAP[y])):
             if (x, y) == problem.initial:
@@ -270,39 +258,10 @@ if __name__ == "__main__":
                 print('N', end='')
             elif (x, y) in path:
                 print('>', end='')
-                contauc += 1
             else:
                 print(MAP[y][x], end='')
 
         print()
-    print("Numero de movimientos:", contauc)
-    print("Costo:", result.cost)
+    print(f"\nNumero de movimientos: {len(result.path())-1}")
+    print(f"Costo: {result.cost:.1f}")
     print("___________________________________")
-    #print("Costo:", result.cost)
-    # Run the solver
-    #result = greedy(problem, graph_search=True)
-    #result = uniform_cost(problem,True) #sin el True, tarda muchísimo
-    #result = astar(problem,graph_search=True)
-    #result = breadth_first(problem, True)
-    #result = depth_first(problem, True)
-    #try:
-       # path = [x[1] for x in result.path()]
-
-
-        # Print the result
-     #   print()
-      #  for y in range(len(MAP)):
-       #     for x in range(len(MAP[y])):
-        #        if (x, y) == problem.initial:
-         #           print('N', end='')
-          #      elif (x, y) == problem.goal:
-           #         print('N', end='')
-            #    elif (x, y) in path:
-             #       print('>', end='')
-              #  else:
-               #     print(MAP[y][x], end='')
-
-            #print()
-    #except AttributeError or NameError:
-     #   raise AttributeError ("Algo salio mal, corre de nuevo la funcion")
-

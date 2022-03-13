@@ -1,2 +1,0 @@
-pyprobs==0.2
-simpleai==0.8.3
