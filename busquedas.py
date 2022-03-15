@@ -18,6 +18,12 @@ import os
 #estado desde el principio es inicializado en la tupla y solamente se va actualizando
 
 # Class containing the methods to solve the maze
+class ErrorDeBusqueda(Exception):
+    import os
+    def __init__(self) -> None:
+        print("Error de busqueda, corre el programa de nuevo pfv")
+        os.abort()
+        
 class MazeSolver(SearchProblem):
     # Initialize the class 
     def __init__(self, board):
@@ -145,9 +151,7 @@ if __name__ == "__main__":
     try:
         path = [x[1] for x in result.path()]
     except AttributeError:
-        print("RUN AGAIN PLEASE")
-        os.abort()
-
+        raise ErrorDeBusqueda
     # Print the result
     print()
     for y in range(len(MAP)):
