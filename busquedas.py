@@ -100,7 +100,7 @@ class MazeSolver(SearchProblem):
 if __name__ == "__main__":
     # Define the map
 
-    MAP = crea_mapa_base(20,150,200,500,mostrar_niveles = 1,locacion_nave=[1,2])
+    MAP = crea_mapa_base(20,150,200,500,mostrar_niveles = 1)
     #MAP = """
     ################################
     #43-43405532*1*005-3202035*2024#
